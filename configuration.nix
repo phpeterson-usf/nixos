@@ -83,6 +83,9 @@
   # Firefox (module-managed)
   programs.firefox.enable = true;
 
+  # Enable nix-ld to run dynamically linked binaries (e.g., uv's Python)
+  programs.nix-ld.enable = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 

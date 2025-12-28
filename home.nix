@@ -10,6 +10,15 @@
 
   home.packages = with pkgs; [
   	claude-code
+  	protonvpn-gui
+  	slack
+  	uv
+  	vscode
+  ];
+
+  # Make sure uv-installed tools are on the PATH
+  home.sessionPath = [
+    "$HOME/.local/bin"
   ];
 
   programs.git = {
@@ -38,18 +47,32 @@
       gl = "git log --oneline --graph --decorate";
       m  = "micro";
       rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
+      # I'm not wild about putting this here but the syntax inside a flake is awful
+      j = "bundle exec jekyll serve --livereload";
     };
 
-    initContent = ''
-      eval "$(${pkgs.starship}/bin/starship init zsh)"
+	initContent = ''
+	  eval "$(${pkgs.starship}/bin/starship init zsh)"
 
-      if [ -f "$HOME/.config/secrets/openai_api_key" ]; then
-        export OPENAI_API_KEY="$(< $HOME/.config/secrets/openai_api_key)"
-      fi
-      if [ -f "$HOME/.config/secrets/anthropic_api_key" ]; then
-        export ANTHROPIC_API_KEY="$(< $HOME/.config/secrets/anthropic_api_key)"
-      fi
-    '';
+	  if [ -f "$HOME/.config/secrets/openai_api_key" ]; then
+	    export OPENAI_API_KEY="$(< $HOME/.config/secrets/openai_api_key)"
+	  fi
+	  if [ -f "$HOME/.config/secrets/anthropic_api_key" ]; then
+	    export ANTHROPIC_API_KEY="$(< $HOME/.config/secrets/anthropic_api_key)"
+	  fi
+
+	  # Ensure autograder is installed
+	  if ! command -v grade &> /dev/null; then
+	    uv tool install git+https://github.com/phpeterson-usf/autograder
+	  fi
+
+	  nix-course() {
+	    local course="$1"
+	    shift
+	    nix develop "path:$HOME/nix-toolchains/$course" "$@"
+	  }
+	'';
+
   };
 
   programs.starship = {
@@ -66,9 +89,10 @@
     };
   };
 
-   programs.direnv = {
-     enable = true;
-     nix-direnv.enable = true;  # better caching for nix flakes
-   };
+  # use direnv for golden-gates, not sure it makes sense for cs272, cs315, ...
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;  # better caching for nix flakes
+  };
 
 }
