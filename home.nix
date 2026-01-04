@@ -14,6 +14,7 @@
   	slack
   	uv
   	vscode
+  	zoom-us
   ];
 
   # Make sure uv-installed tools are on the PATH
@@ -65,14 +66,7 @@
 	  if ! command -v grade &> /dev/null; then
 	    uv tool install git+https://github.com/phpeterson-usf/autograder
 	  fi
-
-	  nix-course() {
-	    local course="$1"
-	    shift
-	    nix develop "path:$HOME/nix-toolchains/$course" "$@"
-	  }
 	'';
-
   };
 
   programs.starship = {
