@@ -86,9 +86,6 @@
   # Enable nix-ld to run dynamically linked binaries (e.g., uv's Python)
   programs.nix-ld.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   # System packages (keep this small; prefer modules + Home Manager)
   environment.systemPackages = with pkgs; [
     curl

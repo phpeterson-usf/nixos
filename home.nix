@@ -8,6 +8,9 @@
   # Start ssh-agent as a user systemd service
   services.ssh-agent.enable = true;
 
+  # Permit closed-source packages like those below
+  nixpkgs.config.allowUnfree = true;
+
   home.packages = with pkgs; [
   	claude-code
   	protonvpn-gui
@@ -25,13 +28,17 @@
   programs.git = {
     enable = true;
     settings = {
-      user = {
-        name = "phpeterson-usf";
-        email = "phpeterson@usfca.edu";
-      };
+      user.name = "phpeterson-usf";
+      user.email = "phpeterson@usfca.edu";
       init.defaultBranch = "main";
       pull.rebase = true;
     };
+    includes = [
+      {
+        condition = "gitdir:~/github/theotherphp/";
+        path = "${config.home.homeDirectory}/.gitconfig-personal";
+      }
+    ];
   };
 
   programs.zsh = {
