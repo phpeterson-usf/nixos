@@ -8,13 +8,12 @@
   # Start ssh-agent as a user systemd service
   services.ssh-agent.enable = true;
 
-  # Permit closed-source packages like those below
-  nixpkgs.config.allowUnfree = true;
-
   home.packages = with pkgs; [
   	claude-code
+  	kdePackages.krdc
   	protonvpn-gui
   	slack
+  	trayscale
   	uv
   	vscode
   	zoom-us

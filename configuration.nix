@@ -67,6 +67,11 @@
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
 
+  # Tailscale for brookcam
+  services.tailscale = {
+  	enable = true;
+  };
+
   # Shells / users
   programs.zsh.enable = true;
 
@@ -93,6 +98,9 @@
     micro
     wl-clipboard
   ];
+
+  # Allow unfree packages (useGlobalPkgs = true in flake means this must be set here)
+  nixpkgs.config.allowUnfree = true;
 
   # Nix flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
